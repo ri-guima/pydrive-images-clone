@@ -7,6 +7,14 @@ bp = Blueprint('image_api', __name__, url_prefix='/image-api')
 
 
 gauth = GoogleAuth()
+gauth.LoadCredentialsFile('credentials.txt')
+if gauth.credentials is None:
+    gauth.LocalWebserverAuth()
+elif gauth.access_token_expired:
+    gauth.Refresh()
+else:
+    gauth.Authorize()
+gauth.SaveCredentialsFile('credentials.txt')
 gauth.LocalWebserverAuth()
 drive = GoogleDrive(gauth)
 
