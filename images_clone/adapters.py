@@ -22,3 +22,9 @@ class Drive(IDrive):
         content = image.GetContentString()
         return Image(id=image['id'], extension=image['fileExtension'],
                      content=content)
+
+
+class FakeDrive(IDrive):
+
+    def get_images(self) -> list[Image]:
+        return [Image(id='12345', extension='jpg', content='Hello World')]
