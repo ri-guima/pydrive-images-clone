@@ -13,7 +13,7 @@ class Drive(IDrive):
         self.__drive = GoogleDrive(gauth)
     
     def get_images(self) -> list[Image]:
-        images = list(filter(is_image, self.__drive.ListFile(
+        images = list(filter(lambda i: is_image(i.get('originalFilename', '')), self.__drive.ListFile(
             {'q': '"root" in parents and trashed=false'}).GetList()
         ))
         return [self.__create_image(i) for i in images]
