@@ -15,4 +15,4 @@ if __name__ == '__main__':
     else:
         drive = Drive()
     for image in drive.get_images():
-        save_image(Path(args.dir), image)
+        save_image(Path(args.dir), image.id, image.content)

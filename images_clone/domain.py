@@ -14,9 +14,9 @@ class Image:
     content: bytes
 
 
-def save_image(dir: Path, image: Image) -> None:
-    with open(dir / f'{image.id}.{image.extension}', 'wb') as f:
-        f.write(image.content)
+def save_image(dir: Path, filename: str, content: bytes) -> None:
+    with open(dir / filename, 'wb') as f:
+        f.write(content)
 
 
 class IDrive(ABC):

@@ -15,6 +15,6 @@ def test_is_image():
 def test_save_image():
     image = Image(id='12345', extension='jpg', content=bytes('Hello World', 'utf-8'))
     dir = 'tests/uploads'
-    save_image(Path(dir), image)
+    save_image(Path(dir), '12345.jpg', image.content)
     assert '12345.jpg' in os.listdir(dir)
     os.remove(Path(dir) / f'{image.id}.{image.extension}')
