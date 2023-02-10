@@ -11,12 +11,12 @@ def is_image(filename: str) -> bool:
 class Image:
     id: str
     extension: str
-    content: str
+    content: bytes
 
 
 def save_image(dir: Path, image: Image) -> None:
     with open(dir / f'{image.id}.{image.extension}', 'wb') as f:
-        f.write(bytes(image.content, 'utf-8'))
+        f.write(image.content)
 
 
 class IDrive(ABC):
