@@ -10,8 +10,9 @@ if __name__ == '__main__':
     parser.add_argument('-d', '--dir', type=str, help='Clone directory')
     parser.add_argument('-t', '--testing', action='store_true')
     args = parser.parse_args()
-    drive = Drive()
     if args.testing:
         drive = FakeDrive()
+    else:
+        drive = Drive()
     for image in drive.get_images():
         save_image(Path(args.dir), image)
