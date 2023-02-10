@@ -19,9 +19,11 @@ class Drive(IDrive):
         return [self.__create_image(i) for i in images]
 
     def __create_image(self, image) -> Image:
-        content = image.GetContentString()
-        return Image(id=image['id'], extension=image['fileExtension'],
-                     content=content)
+        filename = f'{image["id"]}.{image["fileExtension"]}'
+        image.GetContentFile(filename)
+        with open(filename, 'rb') as f:
+            content = f.read()
+        return Image(id=image['id'], extension=image['fileExtension'], content=content)
 
 
 class FakeDrive(IDrive):
