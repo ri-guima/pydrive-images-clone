@@ -1,5 +1,6 @@
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
+import os
 
 from domain import IDrive, Image, is_image
 
@@ -23,6 +24,7 @@ class Drive(IDrive):
         image.GetContentFile(filename)
         with open(filename, 'rb') as f:
             content = f.read()
+        os.remove(filename)
         return Image(id=image['id'], extension=image['fileExtension'], content=content)
 
 
