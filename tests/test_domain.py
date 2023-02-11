@@ -6,8 +6,10 @@ from images_clone.domain import save, is_image, File
 
 
 def test_is_image():
-    assert is_image(File('filename.jpg', bytes('Hello World', 'utf-8')))
-    assert not is_image(File('filename.py', bytes('Hello World', 'utf-8')))
+    assert is_image('filename.jpg')
+    assert is_image('filename.jpeg')
+    assert is_image('filename.png')
+    assert not is_image('filename.py')
 
 
 def test_save_image():
