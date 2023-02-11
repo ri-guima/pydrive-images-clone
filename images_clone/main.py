@@ -2,7 +2,7 @@ from argparse import ArgumentParser
 from pathlib import Path
 
 from adapters import Drive, FakeDrive
-from domain import save_image
+from domain import save
 
 
 if __name__ == '__main__':
@@ -12,7 +12,9 @@ if __name__ == '__main__':
     args = parser.parse_args()
     if args.testing:
         drive = FakeDrive()
+        for image in drive.get_images():
+            save(Path(args.dir) / image.filename, image)
     else:
         drive = Drive()
-    for image in drive.get_images():
-        save_image(Path(args.dir), image.id, image.content)
+        for image in drive.get_images():
+            save(Path(args.dir) / image.filename.split('.')[0], image)

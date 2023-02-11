@@ -3,24 +3,23 @@ from dataclasses import dataclass
 from abc import ABC, abstractmethod
 
 
-def is_image(filename: str) -> bool:
-    return filename.split('.')[-1] in ['jpg', 'jpeg', 'png']
-
-
 @dataclass
-class Image:
-    id: str
-    extension: str
+class File:
+    filename: str
     content: bytes
 
 
-def save_image(dir: Path, filename: str, content: bytes) -> None:
-    with open(dir / filename, 'wb') as f:
-        f.write(content)
+def is_image(file: File) -> bool:
+    return file.filename.split('.')[-1].lower() in ['jpg', 'jpeg', 'png']
+
+
+def save(path: Path, file: File) -> None:
+    with open(path, 'wb') as f:
+        f.write(file.content)
 
 
 class IDrive(ABC):
 
     @abstractmethod
-    def get_images(self) -> list[Image]:
+    def get_images(self) -> list[File]:
         raise NotImplementedError()
