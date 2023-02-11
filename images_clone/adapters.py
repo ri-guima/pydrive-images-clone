@@ -15,7 +15,7 @@ class Drive(IDrive):
     
     def get_images(self) -> list[File]:
         images = list(filter(lambda i: is_image(i.get('originalFilename', '')), self.__drive.ListFile(
-            {'q': 'mimeType="application/vnd.google-apps.folder" and trashed=false and title="IMAGENS"'}).GetList()
+            {'q': '"1s4dHzeGROidDXSG9zkmB5mWCaxmTpY9l" in parents and trashed=false'}).GetList()
         ))
         return [self.__create_image(i) for i in images]
 
