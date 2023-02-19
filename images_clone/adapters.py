@@ -1,5 +1,6 @@
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
+from dotenv import load_dotenv
 import os
 
 from domain import IDrive, File, is_image
@@ -14,8 +15,9 @@ class Drive(IDrive):
         self.__drive = GoogleDrive(gauth)
     
     def get_images(self) -> list[File]:
+        load_dotenv('.env')
         images = list(filter(lambda i: is_image(i.get('originalFilename', '')), self.__drive.ListFile(
-            {'q': '"1s4dHzeGROidDXSG9zkmB5mWCaxmTpY9l" in parents and trashed=false'}).GetList()
+            {'q': f'"{os.getenv("FOLDER_ID", "root")}" in parents and trashed=false'}).GetList()
         ))
         return [self.__create_image(i) for i in images]
 
