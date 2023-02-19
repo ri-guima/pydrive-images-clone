@@ -22,11 +22,10 @@ class Drive(IDrive):
         return [self.__create_image(i) for i in images]
 
     def __create_image(self, image) -> File:
-        filename = f'{image["originalFilename"]}.{image["fileExtension"]}'
-        image.GetContentFile(filename)
-        with open(filename, 'rb') as f:
+        image.GetContentFile(image['originalFilename'])
+        with open(image['originalFilename'], 'rb') as f:
             content = f.read()
-        os.remove(filename)
+        os.remove(image['originalFilename'])
         return File(filename=image['originalFilename'], content=content)
 
 
