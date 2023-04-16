@@ -1,4 +1,4 @@
-# pydrive-images-clone
+# pydrive-files-clone
 
 Copia seus arquivos do Google Drive em uma pasta local
 
