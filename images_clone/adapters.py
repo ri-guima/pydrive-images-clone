@@ -3,7 +3,7 @@ from pydrive.drive import GoogleDrive
 from dotenv import load_dotenv
 import os
 
-from domain import IDrive, File, is_image
+from domain import IDrive, File
 
 
 class Drive(IDrive):
@@ -11,25 +11,26 @@ class Drive(IDrive):
     def __init__(self) -> None:
         gauth = GoogleAuth()
         gauth.LocalWebserverAuth()
-        gauth.LoadCredentialsFile('credentials.json')
-        self.__drive = GoogleDrive(gauth)
-    
-    def get_images(self) -> list[File]:
-        load_dotenv('.env')
-        images = list(filter(lambda i: is_image(i.get('originalFilename', '')), self.__drive.ListFile(
-            {'q': f'"{os.getenv("FOLDER_ID", "root")}" in parents and trashed=false'}).GetList()
-        ))
-        return [self.__create_image(i) for i in images]
+        self._drive = GoogleDrive(gauth)
 
-    def __create_image(self, image) -> File:
-        image.GetContentFile(image['originalFilename'])
-        with open(image['originalFilename'], 'rb') as f:
+    def get_files(self) -> list[File]:
+        load_dotenv()
+        folders_titles = os.getenv('FOLDERS', 'root').split(';')
+        query = {
+            'q': 'mimeType="application/vnd.google-apps.folder" and trashed=false'
+        }
+        folders = self._drive.ListFile(query).GetList()
+        result = []
+        for folder in folders:
+            if folder['title'] in folders_titles:
+                query = {'q': f'"{folder["id"]}" in parents and trashed=false'}
+                result.extend([self._create_file(f) for f in
+                               self._drive.ListFile(query).getList()])
+        return result
+
+    def _create_file(self, file) -> File:
+        file.GetContentFile(file['originalFilename'])
+        with open(file['originalFilename'], 'rb') as f:
             content = f.read()
-        os.remove(image['originalFilename'])
-        return File(filename=image['originalFilename'], content=content)
-
-
-class FakeDrive(IDrive):
-
-    def get_images(self) -> list[File]:
-        return [File(filename='12345.jpg', content=bytes('Hello World', 'utf-8'))]
+        os.remove(file['originalFilename'])
+        return File(filename=file['originalFilename'], content=content)

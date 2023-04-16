@@ -9,10 +9,6 @@ class File:
     content: bytes
 
 
-def is_image(filename: str) -> bool:
-    return filename.split('.')[-1].lower() in ['jpg', 'jpeg', 'png']
-
-
 def save(path: Path, file: File) -> None:
     with open(path, 'wb') as f:
         f.write(file.content)
@@ -21,5 +17,5 @@ def save(path: Path, file: File) -> None:
 class IDrive(ABC):
 
     @abstractmethod
-    def get_images(self) -> list[File]:
+    def get_files(self) -> list[File]:
         raise NotImplementedError()
